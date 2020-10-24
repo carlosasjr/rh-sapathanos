@@ -10,4 +10,10 @@ class EmployeeDocument extends Model
     use HasFactory;
 
     protected $fillable = ['description', 'file'];
+
+
+    public function employee ()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 }

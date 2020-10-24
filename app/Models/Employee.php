@@ -10,4 +10,41 @@ class Employee extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'fantasy',
+        'email',
+        'image',
+        'cpf',
+        'rg',
+        'date_birth',
+        'cellphone',
+        'telephone',
+        'partner',
+        'marital_status',
+        'father',
+        'mother',
+        'naturalness',
+        'nationality',
+        'office',
+        'street',
+        'number',
+        'district',
+        'complement',
+        'cep',
+        'city',
+        'country',
+        'salary',
+        'hours',
+        'observation',
+        'status',
+        'user_id'
+    ];
+
+    public function employeeDocuments()
+    {
+        return $this->hasMany(EmployeeDocument::class);
+    }
+
 }
