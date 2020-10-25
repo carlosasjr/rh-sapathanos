@@ -23,7 +23,6 @@ class EmployeeFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->name,
-            'fantasy' => $this->faker->unique()->name,
             'user_id' => 1
         ];
     }

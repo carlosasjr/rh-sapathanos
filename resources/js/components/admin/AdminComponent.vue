@@ -6,7 +6,9 @@
             </li>
         </ul>
 
-        <router-view></router-view>
+        <div class="container">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 

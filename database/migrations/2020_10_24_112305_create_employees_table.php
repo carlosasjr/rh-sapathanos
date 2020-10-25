@@ -16,7 +16,6 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('fantasy');
             $table->string('email')->nullable();
 
             $table->string('image')->nullable();
@@ -46,6 +45,9 @@ class CreateEmployeesTable extends Migration
 
             $table->string('salary')->nullable();
             $table->time('hours')->nullable();
+
+            $table->date('admission')->nullable();
+            $table->date('resignation')->nullable();
 
 
             $table->text('observation')->nullable();
