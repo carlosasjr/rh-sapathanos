@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Snotify from 'vue-snotify'
 
-
 Vue.use(BootstrapVue)
 Vue.use(Snotify, {toast: {showProgressBar: false}});
 

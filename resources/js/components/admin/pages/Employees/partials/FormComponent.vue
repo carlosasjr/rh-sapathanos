@@ -119,7 +119,8 @@
 
                 <div class="card-body">
                     <div :class="['form-group', {'has-error' : errors.image}]">
-
+                        <input type="file" class="form-control">
+                        <div v-if="errors.image">{{ errors.image[0] }}</div>
                     </div>
                 </div>
             </div>
