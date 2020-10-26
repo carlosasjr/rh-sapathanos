@@ -35,6 +35,8 @@ class Employee extends Model
         'city',
         'country',
         'salary',
+        'admission',
+        'resignation',
         'hours',
         'observation',
         'status',

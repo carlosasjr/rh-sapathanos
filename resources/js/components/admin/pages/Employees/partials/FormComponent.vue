@@ -1,6 +1,31 @@
 <template>
     <div>
-        <form class="form" @submit.prevent="onSubmit" enctype="multipart/form-data">
+        <form class="form" @submit.prevent="onSubmit">
+            <div class="card car-outline card-info">
+                <div class="card-header">
+                    <div class="card-title">
+                        Foto do Funcionário
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div :class="['form-group', {'has-error' : errors.image}]">
+                        <div v-if="errors.image">{{ errors.image[0] }}</div>
+                        <div v-if="imagePreview" class="text-center">
+                            <img :src="imagePreview" class="image-preview">
+                            <br>
+                            <button class="btn btn-danger" @click.prevent="removePreviewImage">Remover</button>
+                        </div>
+
+                        <div v-else>
+                            <input type="file" @change="onFileChange" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
             <div class="card  card-outline card-info">
                 <div class="card-header">
                     <div class="card-title">
@@ -52,6 +77,7 @@
 
                         <div class="col-4">
                             <div :class="['form-group', {'has-error' : errors.cellphone}]">
+                                <label></label>
                                 <input v-model="employee.cellphone"
                                        type="text" class="form-control" placeholder="Celular">
                                 <div v-if="errors.cellphone">{{ errors.cellphone[0] }}</div>
@@ -60,6 +86,7 @@
 
                         <div class="col-4">
                             <div :class="['form-group', {'has-error' : errors.telephone}]">
+                                <label></label>
                                 <input v-model="employee.telephone"
                                        type="text" class="form-control" placeholder="Telefone:">
                                 <div v-if="errors.telephone">{{ errors.telephone[0] }}</div>
@@ -110,22 +137,6 @@
 
             <br>
 
-            <div class="card car-outline card-info">
-                <div class="card-header">
-                    <div class="card-title">
-                        Foto do Funcionário
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <div :class="['form-group', {'has-error' : errors.image}]">
-                        <input type="file" class="form-control">
-                        <div v-if="errors.image">{{ errors.image[0] }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <br>
             <div class="card car-outline card-info">
                 <div class="card-header">
                     <div class="card-title">
@@ -204,7 +215,6 @@
                     partner: '',
                     marital_status: '',
                     observation: '',
-                    image: '',
                     admission: '',
                     resignation: '',
                     salary: '',
@@ -217,25 +227,91 @@
 
         data() {
             return {
-                errors: []
+                errors: {},
+                image: null,
+                imagePreview: null,
             }
         },
 
-
         methods: {
+            serialize (object) {
+                const formData = new FormData();
+
+                Object.entries(object).forEach(([key, value]) => {
+                    if (value != null) {
+                        formData.append(key, value);
+                    }
+                });
+
+                if (this.image)
+                    formData.append('image', this.image)
+
+                return formData
+            },
+
+
+            onFileChange(e) {
+                let files = e.target.files || e.dataTransfer.files
+
+                if (!files.length)
+                    return
+
+                this.image = files[0]
+
+                this.previewImage(this.image)
+            },
+
+            previewImage(file) {
+                let reader = new FileReader()
+                reader.onload = (e) => {
+                    this.imagePreview = e.target.result
+                }
+
+                reader.readAsDataURL(file)
+            },
+
+            removePreviewImage() {
+                this.imagePreview  = null
+                this.image = null
+            },
+
+
+
+
             onSubmit() {
                 const action = this.updating ? 'updateEmployee' : 'saveEmployee'
 
-                this.$store.dispatch(action, this.employee)
+                this.$store.dispatch(action, this.serialize(this.employee))
                     .then(response => {
+                        this.reset()
                         this.$snotify.success('Registro salvo com sucesso!!', 'Sucesso!')
                         this.$router.push({name: 'admin.employees'})
                     })
+                .catch(error => {
+                    this.$snotify.error('Falha ao cadastrar', 'Opps!')
+                    this.errors = error;
+                })
+            },
+
+            reset () {
+                this.errors = []
+                this.imagePreview = null
+                this.image = null
             }
         }
     }
 </script>
 
 <style scoped>
+    .has-error {
+        color: red
+    }
 
+    .has-error input {
+        border: 1px solid red;
+    }
+
+    .image-preview {
+        max-width: 89px;
+    }
 </style>

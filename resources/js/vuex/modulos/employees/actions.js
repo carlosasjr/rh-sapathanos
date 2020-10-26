@@ -1,5 +1,11 @@
 import axios from "axios";
 
+const CONFIGS = {
+    headers : {
+        'content-type' : 'multipart/form-data'
+    }
+}
+
 const actions = {
     loadEmplooyes(context, params) {
         context.commit('CHANGE_PRELOADER', true)
@@ -10,23 +16,31 @@ const actions = {
             .finally(() => context.commit('CHANGE_PRELOADER', false))
     },
 
-    saveEmployee(context, employee) {
+    saveEmployee(context, dataForm) {
         context.commit('CHANGE_PRELOADER', true)
         return new Promise((resolve, reject) => {
-            axios.post('/api/v1/employees', employee)
+            axios.post('/api/v1/employees', dataForm, CONFIGS)
                 .then(response => resolve(response.data))
                 .catch(error => reject(error.response.data.errors))
                 .finally(() => context.commit('CHANGE_PRELOADER', false))
         })
     },
 
-    updateEmployee(context, employee) {
+
+    updateEmployee (context, formData) {
         context.commit('CHANGE_PRELOADER', true)
+
+        formData.append('_method', 'PUT')
+
         return new Promise((resolve, reject) => {
-            axios.put(`/api/v1/employees/${employee.id}`, employee)
+            axios.post(`/api/v1/employees/${formData.get('id')}`, formData)
                 .then(response => resolve(response.data))
-                .catch(error => reject(error.response.data.errors))
-                .finally(() => context.commit('CHANGE_PRELOADER', false))
+                .catch(error => {
+                    console.log(error)
+                    context.commit('CHANGE_PRELOADER', false)
+                    reject(error.response.data.errors)
+                })
+                .finally (() => context.commit('CHANGE_PRELOADER', false))
         })
     },
 

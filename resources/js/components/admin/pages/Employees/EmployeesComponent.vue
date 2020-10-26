@@ -11,6 +11,7 @@
         <table class="table table-dark">
             <thead>
                 <tr>
+                    <th with="150">Foto</th>
                     <th>#id</th>
                     <th>Nome</th>
                     <th with="200">Ações</th>
@@ -19,6 +20,11 @@
 
             <tbody>
                 <tr v-for="employee in employees.data" :key="employee.id">
+                    <td>
+                        <div v-if="employee.image">
+                            <img :src="[`/storage/employees/${employee.image}`]" :alt="employee.name" class="img-list">
+                        </div>
+                    </td>
                     <td>{{ employee.id }}</td>
                     <td>{{ employee.name }}</td>
                     <td>
@@ -111,5 +117,7 @@
 </script>
 
 <style scoped>
-
+ .img-list {
+     max-width: 55px;
+ }
 </style>
