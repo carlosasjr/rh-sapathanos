@@ -1,7 +1,7 @@
 <template>
     <div>
         <form class="form" @submit.prevent="onSubmit">
-            <div class="card car-outline card-info">
+            <div class="card card-primary">
                 <div class="card-header">
                     <div class="card-title">
                         Foto do Funcionário
@@ -26,7 +26,7 @@
 
             <br>
 
-            <div class="card  card-outline card-info">
+            <div class="card card-secondary">
                 <div class="card-header">
                     <div class="card-title">
                         Identificação
@@ -51,6 +51,7 @@
                         <div class="col-6">
                             <div :class="['form-group', {'has-error' : errors.cpf}]">
                                 <input v-model="employee.cpf"
+                                       v-mask="'###.###.###-##'"
                                        type="text" class="form-control" placeholder="CPF">
                                 <div v-if="errors.cpf">{{ errors.cpf[0] }}</div>
                             </div>
@@ -59,6 +60,7 @@
                         <div class="col-6">
                             <div :class="['form-group', {'has-error' : errors.name}]">
                                 <input v-model="employee.rg"
+                                       v-mask="'##.###.###-#'"
                                        type="text" class="form-control" placeholder="RG:">
                                 <div v-if="errors.rg">{{ errors.rg[0] }}</div>
                             </div>
@@ -79,6 +81,7 @@
                             <div :class="['form-group', {'has-error' : errors.cellphone}]">
                                 <label></label>
                                 <input v-model="employee.cellphone"
+                                       v-mask="'(##) #####-####'"
                                        type="text" class="form-control" placeholder="Celular">
                                 <div v-if="errors.cellphone">{{ errors.cellphone[0] }}</div>
                             </div>
@@ -88,6 +91,7 @@
                             <div :class="['form-group', {'has-error' : errors.telephone}]">
                                 <label></label>
                                 <input v-model="employee.telephone"
+                                       v-mask="'(##) ####-####'"
                                        type="text" class="form-control" placeholder="Telefone:">
                                 <div v-if="errors.telephone">{{ errors.telephone[0] }}</div>
                             </div>
@@ -168,8 +172,10 @@
                     <div class="row">
                         <div class="col-6">
                             <div :class="['form-group', {'has-error' : errors.salary}]">
-                                <input v-model="employee.salary"
-                                       type="text" class="form-control" placeholder="Salário">
+                                <vue-numeric currency="R$"
+                                             separator="."
+                                             :precision="2"
+                                             v-model="employee.salary" class="form-control"></vue-numeric>
                                 <div v-if="errors.salary">{{ errors.salary[0] }}</div>
                             </div>
                         </div>
@@ -177,6 +183,7 @@
                         <div class="col-6">
                             <div :class="['form-group', {'has-error' : errors.hours}]">
                                 <input v-model="employee.hours"
+                                       v-mask="'##:##:##'"
                                        type="text" class="form-control" placeholder="Horas">
                                 <div v-if="errors.hours">{{ errors.hours[0] }}</div>
                             </div>
@@ -187,6 +194,7 @@
 
             <br>
             <button class="btn btn-primary" type="submit">Salvar</button>
+            <br>
         </form>
     </div>
 </template>

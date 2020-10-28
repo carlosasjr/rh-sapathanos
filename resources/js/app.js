@@ -1,3 +1,5 @@
+require('./bootstrap');
+
 window.Vue = require('vue');
 
 import router from './router/routers'
@@ -6,7 +8,11 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Snotify from 'vue-snotify'
+import VueTheMask from 'vue-the-mask'
+import VueNumeric from 'vue-numeric'
 
+Vue.use(VueNumeric)
+Vue.use(VueTheMask)
 Vue.use(BootstrapVue)
 Vue.use(Snotify, {toast: {showProgressBar: false}});
 
@@ -19,3 +25,10 @@ const app= new Vue ({
     store,
     el: '#app',
 });
+
+store.dispatch('checkLogin')
+    .then(() =>
+        router.push({name: 'admin'})
+    )
+
+

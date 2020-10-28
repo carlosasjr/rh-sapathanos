@@ -33,7 +33,9 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $employees = $this->employee->paginate($this->totalPage);
+        $employees = $this->employee->
+          orderBy('id', 'desc')
+        ->paginate($this->totalPage);
 
         return response()->json($employees);
     }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Lista de Funcionários</h1>
+        <h1>Gestão de Funcionários</h1>
 
         <div class="row">
             <div class="col">
@@ -120,4 +120,9 @@
  .img-list {
      max-width: 55px;
  }
+
+ table {
+     margin-top: 5px
+ }
+
 </style>

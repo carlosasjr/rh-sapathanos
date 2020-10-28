@@ -34,6 +34,17 @@ class AuthController extends Controller
     }
 
     /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        return response()->json(auth('api')->user());
+    }
+
+
+    /**
      * Log the user out (Invalidate the token).
      *
      * @return \Illuminate\Http\JsonResponse
@@ -64,8 +75,11 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $user = auth('api')->user();
+
         return response()->json([
-            'access_token' => $token,
+            'token' => $token,
+            'user' => $user,
             'token_type' => 'bearer',
         ]);
     }

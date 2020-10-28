@@ -20,11 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('refresh', [AuthController::class, 'refresh']);
+Route::get('me', [AuthController::class, 'me']);
 
 
 Route::group([
     'prefix' => 'v1',
-    //'middleware' => ''
+    //'middleware' => 'jwt.auth'
 ], function () {
     Route::apiResource('employees', EmployeeController::class);
 });
