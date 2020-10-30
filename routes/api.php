@@ -25,7 +25,7 @@ Route::get('me', [AuthController::class, 'me']);
 
 Route::group([
     'prefix' => 'v1',
-    //'middleware' => 'jwt.auth'
+    'middleware' => 'jwt.auth'
 ], function () {
     Route::apiResource('employees', EmployeeController::class);
 });

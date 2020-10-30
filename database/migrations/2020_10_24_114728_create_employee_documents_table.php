@@ -16,7 +16,8 @@ class CreateEmployeeDocumentsTable extends Migration
         Schema::create('employee_documents', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id');
-            $table->string('description');
+            $table->string('name');
+            $table->string('extension', 10);
             $table->string('file');
 
             $table->foreign('employee_id')

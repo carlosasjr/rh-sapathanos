@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light justify-content-between ">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -16,6 +16,12 @@
                     </router-link>
                 </li>
             </ul>
+
+            <ul class="navbar-nav">
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" @click.prevent="logout" class="nav-link">Logout</a>
+                </li>
+            </ul>
         </nav>
         <!-- /.navbar -->
     </div>
@@ -23,6 +29,14 @@
 
 <script>
     export default {
+
+        methods : {
+            logout () {
+                this.$store.dispatch('logout')
+                    .then(() => this.$router.push({name: 'login'}))
+            }
+        }
+
     }
 </script>
 

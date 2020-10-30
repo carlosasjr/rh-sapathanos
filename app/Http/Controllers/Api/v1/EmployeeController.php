@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Input\Input;
 
 class EmployeeController extends Controller
 {
@@ -33,9 +34,9 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $employees = $this->employee->
-          orderBy('id', 'desc')
-        ->paginate($this->totalPage);
+        $employees = $this->employee
+                          ->orderBy('id', 'desc')
+                          ->paginate($this->totalPage);
 
         return response()->json($employees);
     }
@@ -48,14 +49,10 @@ class EmployeeController extends Controller
      */
     public function store(CreateUpdateEmployeeRequest $request)
     {
-        $data = $request->all();
+         $data = $request->all();
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $name = Str::of($request->name)->kebab();
-            $extension = $request->file('image')->extension();
-
-            $nameFile = "{$name}.{$extension}";
-            $data['image'] = $nameFile;
+            list($nameFile, $data) = $this->generateSlugImage($request, $data);
 
             $upload = $request->file('image')->storeAs($this->path, $nameFile);
 
@@ -66,7 +63,8 @@ class EmployeeController extends Controller
 
         $employee = $this->employee->create($data);
 
-        //$employee->employeeDocuments->create();
+        $this->uploadFiles($request, $employee);
+
 
         return response()->json($employee);
     }
@@ -100,11 +98,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $this->deleteFileExists($employee);
 
-            $name = Str::of($request->name)->kebab();
-            $extension = $request->file('image')->extension();
-
-            $nameFile = "{$name}.{$extension}";
-            $data['image'] = $nameFile;
+            list($nameFile, $data) = $this->generateSlugImage($request, $data);
 
             $upload = $request->file('image')->storeAs($this->path, $nameFile);
 
@@ -114,6 +108,8 @@ class EmployeeController extends Controller
         }
 
         $employee->update($data);
+
+        $this->uploadFiles($request, $employee);
 
         return response()->json($employee);
     }
@@ -143,6 +139,44 @@ class EmployeeController extends Controller
 
                 Storage::delete($file);
             }
+        }
+    }
+
+    /**
+     * @param CreateUpdateEmployeeRequest $request
+     * @param array $data
+     * @return array
+     */
+    private function generateSlugImage(CreateUpdateEmployeeRequest $request, array $data): array
+    {
+        $name = Str::of($request->name)->kebab();
+        $extension = $request->file('image')->extension();
+
+        $nameFile = "{$name}.{$extension}";
+        $data['image'] = $nameFile;
+        return array($nameFile, $data);
+    }
+
+    /**
+     * @param CreateUpdateEmployeeRequest $request
+     * @param $employee
+     */
+    private function uploadFiles(CreateUpdateEmployeeRequest $request, $employee)
+    {
+        if ($request->hasFile('files')) {
+
+            $filesUploaded = [];
+
+            foreach ($request->file('files') as $file) {
+                $path = $file->store($this->path . '/files', 'public');
+                $filesUploaded[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'extension' => $file->getClientOriginalExtension(),
+                    'file' => $path
+                ];
+            }
+
+            $employee->employeeDocuments()->createMany($filesUploaded);
         }
     }
 }

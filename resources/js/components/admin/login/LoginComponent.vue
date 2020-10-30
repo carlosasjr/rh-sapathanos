@@ -11,7 +11,7 @@
 
                     <form @submit.prevent="login">
                         <div class="input-group mb-3">
-                            <input v-model="formData.email" type="email" class="form-control" placeholder="Email">
+                            <input autocomplete="username"  v-model="formData.email" type="email" class="form-control" placeholder="Email">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-envelope"></span>
@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input v-model="formData.password" type="password" class="form-control" placeholder="Senha">
+                            <input autocomplete="new-password" v-model="formData.password" type="password" class="form-control" placeholder="Senha">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>

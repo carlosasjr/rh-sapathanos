@@ -13,13 +13,11 @@ import LoginComponent from "../components/admin/login/LoginComponent";
 Vue.use(VueRouter)
 
 const routes = [
-    {path: '/login', component: LoginComponent, name: 'login' },
-
+    {path: '/login', component: LoginComponent, name: 'login', meta: {auth: false} },
     {path: '/', component: AdminComponent,
         meta: {auth: true},
         children: [
             {path: '', component: DashBoardComponent, name: 'admin'},
-
             {path: 'employees', component: EmployeesComponent, name: 'admin.employees'},
             {path: 'employees/create', component: CreateEmployeeComponent, name: 'admin.employees.create'},
             {path: 'employees/:id/edit', component: UpdateEmployeeComponent, name: 'admin.employees.edit', props: true},
@@ -33,11 +31,17 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.meta.auth && !store.state.auth.authenticated) {
+        store.commit('CHANGE_URL_BACK', to.name)
         return router.push({name: 'login'})
     }
 
     if (to.matched.some(record => record.meta.auth) && !store.state.auth.authenticated ) {
+        store.commit('CHANGE_URL_BACK', to.name)
         return router.push({name: 'login'})
+    }
+
+    if (to.meta.hasOwnProperty('auth') && !to.meta.auth && store.state.auth.authenticated) {
+        return router.push({name: 'admin'})
     }
 
     next()

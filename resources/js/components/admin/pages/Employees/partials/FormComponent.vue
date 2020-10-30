@@ -18,7 +18,7 @@
                         </div>
 
                         <div v-else>
-                            <input type="file" @change="onFileChange" class="form-control">
+                            <input type="file" @change="onImageChange" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -133,7 +133,8 @@
 
                 <div class="card-body">
                     <div :class="['form-group', {'has-error' : errors.observation}]">
-                        <textarea class="form-control" v-model="employee.observation" cols="30" rows="10" placeholder="Outras informações do funcionário"></textarea>
+                        <textarea class="form-control" v-model="employee.observation" cols="30" rows="10"
+                                  placeholder="Outras informações do funcionário"></textarea>
                         <div v-if="errors.observation">{{ errors.observation[0] }}</div>
                     </div>
                 </div>
@@ -193,6 +194,45 @@
             </div>
 
             <br>
+
+            <div class="card car-outline card-danger">
+                <div class="card-header">
+                    <div class="card-title">
+                        Anexar Documentos
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="large-12 medium-12 small-12 filezone">
+                        <input class="files_upload" type="file" id="files" ref="files" multiple @change="handleFiles"/>
+                        <p>
+                            Solte seus arquivos aqui <br>ou clique para pesquisar
+                        </p>
+                    </div>
+
+                    <div v-for="(file, key) in files" class="file-listing">
+                        <img class="preview" v-bind:ref="'preview'+parseInt(key)"/>
+                        {{ file.name }}
+                        <div class="success-container" v-if="file.id > 0">
+                            Sucesso
+                        </div>
+                        <div class="remove-container" v-else>
+                            <a class="remove" v-on:click="removeFile(key)">Remover</a>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <ul class="list-group">
+                        <li class="list-group-item" v-for="(document, index) in employee.employee_documents" :key="index">
+                            <a :href="`storage/${document.file}`" download>{{ document.name }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <br>
+
             <button class="btn btn-primary" type="submit">Salvar</button>
             <br>
         </form>
@@ -204,9 +244,9 @@
     export default {
         props: {
             updating: {
-              required: false,
-              type: Boolean,
-              default: false
+                required: false,
+                type: Boolean,
+                default: false
             },
 
             employee: {
@@ -238,11 +278,12 @@
                 errors: {},
                 image: null,
                 imagePreview: null,
+                files: []
             }
         },
 
         methods: {
-            serialize (object) {
+            serialize(object) {
                 const formData = new FormData();
 
                 Object.entries(object).forEach(([key, value]) => {
@@ -251,14 +292,21 @@
                     }
                 });
 
-                if (this.image)
+                if (this.image) {
                     formData.append('image', this.image)
+                }
+
+                if (this.files.length > 0) {
+                    for (var i = 0; i < this.files.length; i++) {
+                        formData.append('files[]', this.files[i])
+                    }
+                }
 
                 return formData
             },
 
 
-            onFileChange(e) {
+            onImageChange(e) {
                 let files = e.target.files || e.dataTransfer.files
 
                 if (!files.length)
@@ -279,11 +327,44 @@
             },
 
             removePreviewImage() {
-                this.imagePreview  = null
+                this.imagePreview = null
                 this.image = null
             },
 
+            handleFiles(e) {
+                let files = e.target.files || e.dataTransfer.files
 
+                if (!files.length)
+                    return
+
+                for (var i = 0; i < files.length; i++) {
+                    this.files.push(files[i]);
+                }
+
+                this.getImagePreviews();
+            },
+
+            getImagePreviews(){
+                for( let i = 0; i < this.files.length; i++ ){
+                    if ( /\.(jpe?g|png|gif)$/i.test( this.files[i].name ) ) {
+                        let reader = new FileReader();
+                        reader.addEventListener("load", function(){
+                            this.$refs['preview'+parseInt( i )][0].src = reader.result;
+                        }.bind(this), false);
+                        reader.readAsDataURL( this.files[i] );
+                    }else{
+                        this.$nextTick(function(){
+                            this.$refs['preview'+parseInt( i )][0].src = '/images/generic.png';
+                        });
+                    }
+                }
+            },
+
+
+            removeFile( key ){
+                this.files.splice( key, 1 );
+                this.getImagePreviews();
+            },
 
 
             onSubmit() {
@@ -295,13 +376,13 @@
                         this.$snotify.success('Registro salvo com sucesso!!', 'Sucesso!')
                         this.$router.push({name: 'admin.employees'})
                     })
-                .catch(error => {
-                    this.$snotify.error('Falha ao cadastrar', 'Opps!')
-                    this.errors = error;
-                })
+                    .catch(error => {
+                        this.$snotify.error('Falha ao cadastrar', 'Opps!')
+                        this.errors = error;
+                    })
             },
 
-            reset () {
+            reset() {
                 this.errors = []
                 this.imagePreview = null
                 this.image = null
@@ -322,4 +403,58 @@
     .image-preview {
         max-width: 89px;
     }
+
+    .files_upload{
+        opacity: 0;
+        width: 100%;
+        height: 200px;
+        position: absolute;
+        cursor: pointer;
+    }
+    .filezone {
+        outline: 2px dashed grey;
+        outline-offset: -10px;
+        background: #ccc;
+        color: dimgray;
+        padding: 10px 10px;
+        min-height: 200px;
+        position: relative;
+        cursor: pointer;
+    }
+    .filezone:hover {
+        background: #c0c0c0;
+    }
+
+    .filezone p {
+        font-size: 1.2em;
+        text-align: center;
+        padding: 50px 50px 50px 50px;
+    }
+    div.file-listing img{
+        max-width: 90%;
+    }
+
+    div.file-listing{
+        margin: auto;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    div.file-listing img{
+        height: 100px;
+    }
+    div.success-container{
+        text-align: center;
+        color: green;
+    }
+
+    div.remove-container{
+        text-align: center;
+    }
+
+    div.remove-container a{
+        color: red;
+        cursor: pointer;
+    }
+
 </style>

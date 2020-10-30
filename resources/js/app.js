@@ -27,8 +27,7 @@ const app= new Vue ({
 });
 
 store.dispatch('checkLogin')
-    .then(() =>
-        router.push({name: 'admin'})
-    )
+    .then(response => router.push({name: store.state.auth.url_back}))
+    .catch(error => {})
 
 

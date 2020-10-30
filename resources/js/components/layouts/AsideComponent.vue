@@ -19,7 +19,7 @@
                         <!--<img src="#" class="img-circle elevation-2" alt="User Image">-->
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Usuários logado</a>
+                        <a href="#" class="d-block">{{ getUserAuth }}</a>
                     </div>
                 </div>
 
@@ -57,7 +57,11 @@
 
 <script>
     export default {
-
+        computed: {
+            getUserAuth () {
+                return this.$store.state.auth.me.name
+            }
+        }
     }
 </script>
 

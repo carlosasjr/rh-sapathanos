@@ -9,7 +9,7 @@ class EmployeeDocument extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description', 'file'];
+    protected $fillable = ['name', 'file', 'extension'];
 
 
     public function employee ()
