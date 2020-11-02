@@ -33,6 +33,7 @@ class Employee extends Model
         'complement',
         'cep',
         'city',
+        'state',
         'country',
         'salary',
         'admission',

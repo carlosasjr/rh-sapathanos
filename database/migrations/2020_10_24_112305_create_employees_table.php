@@ -41,6 +41,7 @@ class CreateEmployeesTable extends Migration
             $table->string('complement')->nullable();
             $table->string('cep')->nullable();
             $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->string('country')->nullable();
 
             $table->string('salary')->nullable();

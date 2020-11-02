@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\v1\EmployeeController;
+use App\Http\Controllers\Api\v1\EmployeeEmailControler;
+use App\Http\Controllers\Api\v1\EmployeeFileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +29,8 @@ Route::group([
     'prefix' => 'v1',
     'middleware' => 'jwt.auth'
 ], function () {
+    Route::get('employee-file/{employee}', EmployeeFileController::class);
+    Route::get('employee-sendmail', EmployeeEmailControler::class);
     Route::apiResource('employees', EmployeeController::class);
 });
 

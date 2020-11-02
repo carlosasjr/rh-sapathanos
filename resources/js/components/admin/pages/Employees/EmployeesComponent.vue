@@ -6,6 +6,10 @@
             <div class="col">
                 <router-link class="btn btn-primary" :to="{name: 'admin.employees.create'}">Adicionar</router-link>
             </div>
+
+            <div class="col">
+                <a href="#" @click.prevent="confirmHolerite" class="btn btn-success">Enviar Holerite</a>
+            </div>
         </div>
 
         <table class="table table-dark">
@@ -30,6 +34,7 @@
                     <td>
                         <router-link class="btn btn-info" :to="{name: 'admin.employees.edit', params: {id: employee.id }}">Editar</router-link>
                         <button @click.prevent="confirmation(employee)" class="btn btn-danger">Excluir</button>
+                        <a href="#" @click.prevent="printFile(employee)" class="btn btn-primary">Ficha</a>
                     </td>
                 </tr>
             </tbody>
@@ -105,8 +110,37 @@
                 .catch(error => {
                     this.$snotify.error('Falha ao deletar', 'Opps!!')
                 })
-            }
+            },
 
+            printFile (employee) {
+               this.$store.dispatch('printFile', employee)
+            },
+
+            confirmHolerite() {
+                this.$snotify.confirm(`Deseja realmente enviar os holerites?`,
+                    'Confirma?', {
+                        timeout: 10000,
+                        showProgressBar: true,
+                        pauseOnHover: true,
+                        position: "centerCenter",
+                        closeOnClick: true,
+                        buttons: [
+                            {
+                                text: 'Não', action: null
+                            },
+                            {
+                                text: 'Sim', action: (value) => {
+                                    this.sendHolerite()
+                                    this.$snotify.remove(value.id)
+                                }
+                            }
+                        ]
+                    })
+            },
+
+            sendHolerite () {
+               this.$store.dispatch('sendHolerite')
+            }
         },
 
         components: {

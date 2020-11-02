@@ -179,6 +179,12 @@ return [
          * JWT
          */
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
+        /**
+         * DomPDF
+         */
+        Barryvdh\DomPDF\ServiceProvider::class,
+
     ],
 
     /*
@@ -236,6 +242,12 @@ return [
          */
 
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+
+        /**
+         * DomPDF
+         */
+
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 
