@@ -7,8 +7,8 @@
                 <router-link class="btn btn-primary" :to="{name: 'admin.employees.create'}">Adicionar</router-link>
             </div>
 
-            <div class="col">
-                <a href="#" @click.prevent="confirmHolerite" class="btn btn-success">Enviar Holerite</a>
+            <div class="col d-flex align-items-end flex-column bd-highlight mb-3">
+                <a href="#" @click.prevent="confirmHolerite" class="btn btn-success">Gerar Folha de Pagamento</a>
             </div>
         </div>
 
@@ -117,7 +117,7 @@
             },
 
             confirmHolerite() {
-                this.$snotify.confirm(`Deseja realmente enviar os holerites?`,
+                this.$snotify.confirm(`Deseja realmente gerar a folha de pagamento?`,
                     'Confirma?', {
                         timeout: 10000,
                         showProgressBar: true,
@@ -140,6 +140,9 @@
 
             sendHolerite () {
                this.$store.dispatch('sendHolerite')
+                .then(() => this.$snotify.success('Folha de pagamento gerada com sucesso!'))
+                .catch(() => this.$snotify.error('Falha ao gerar folha de pagamento..', 'Opss..'))
+
             }
         },
 

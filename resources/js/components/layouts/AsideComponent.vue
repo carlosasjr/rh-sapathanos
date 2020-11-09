@@ -19,7 +19,7 @@
                         <!--<img src="#" class="img-circle elevation-2" alt="User Image">-->
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{ getUserAuth }}</a>
+                        <router-link class="d-block" :to="{name: 'profile'}">{{ getUserAuth }}</router-link>
                     </div>
                 </div>
 

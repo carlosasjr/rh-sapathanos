@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\ProfileController;
 use App\Http\Controllers\Api\v1\EmployeeController;
 use App\Http\Controllers\Api\v1\EmployeeEmailControler;
 use App\Http\Controllers\Api\v1\EmployeeFileController;
@@ -23,6 +24,10 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('refresh', [AuthController::class, 'refresh']);
 Route::get('me', [AuthController::class, 'me']);
+
+
+Route::put('update-profile', [ProfileController::class, 'update']);
+Route::post('register', [ProfileController::class, 'register']);
 
 
 Route::group([

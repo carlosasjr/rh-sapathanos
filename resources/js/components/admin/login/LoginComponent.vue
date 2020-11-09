@@ -47,7 +47,7 @@
                         <a href="forgot-password.html">Esquici minha senha</a>
                     </p>
                     <p class="mb-0">
-                        <a href="register.html" class="text-center">Registrar um novo membro</a>
+                        <router-link class="text-center" :to="{name: 'register'}">Registrar um novo membro</router-link>
                     </p>
                 </div>
                 <!-- /.login-card-body -->

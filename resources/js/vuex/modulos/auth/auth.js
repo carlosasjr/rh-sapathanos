@@ -52,7 +52,7 @@ export default {
                 context.commit('CHANGE_PRELOADER', true)
                 axios.get('/api/me')
                     .then(response => {
-                        context.commit('AUTH_USER_OK', response.data)
+                        context.commit('AUTH_USER_OK', response.data.user)
                         resolve()
                     })
                     .catch(() => reject())
