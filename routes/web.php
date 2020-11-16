@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/{any}', function () {
-    return view('vue.initial');
+    return view('welcome');
 })->where('any', '.*');
