@@ -2,12 +2,12 @@
     <div>
         <h1>Gestão de Funcionários</h1>
 
-        <div class="row">
-            <div class="col">
+        <div class="d-flex justify-content-between">
+            <div class="col-6">
                 <router-link class="btn btn-primary" :to="{name: 'admin.employees.create'}">Adicionar</router-link>
             </div>
 
-            <div class="col d-flex align-items-end flex-column bd-highlight mb-3">
+            <div class="col-6">
                 <a href="#" @click.prevent="confirmHolerite" class="btn btn-success">Gerar Folha de Pagamento</a>
             </div>
         </div>
