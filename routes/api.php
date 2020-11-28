@@ -32,10 +32,11 @@ Route::post('register', [ProfileController::class, 'register']);
 
 Route::group([
     'prefix' => 'v1',
-    'middleware' => 'jwt.auth'
+  //  'middleware' => 'jwt.auth'
 ], function () {
     Route::get('employee-file/{employee}', EmployeeFileController::class);
     Route::get('employee-sendmail', EmployeeEmailControler::class);
+    Route::get('employees/all', [EmployeeController::class, 'all']);
     Route::apiResource('employees', EmployeeController::class);
 });
 

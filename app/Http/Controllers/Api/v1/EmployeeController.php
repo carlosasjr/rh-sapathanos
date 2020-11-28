@@ -41,6 +41,15 @@ class EmployeeController extends Controller
         return response()->json($employees);
     }
 
+    public function all()
+    {
+        $employees = $this->employee
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return response()->json($employees);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
